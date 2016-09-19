@@ -13,7 +13,7 @@ import okhttp3.Response;
  */
 public class NhkProgramDataLoader {
     private static final String apiKey = "?key=fCz1UEF3hiRhUqvMoAwqj7e9YnC5cudE";
-    private static final String baseUrl = "http://api.nhk.or.jp/v2/pg/list/130/g1/2016-09-18.json";
+    private static final String baseUrl = "http://api.nhk.or.jp/v2/pg/list/130/g1/2016-09-19.json";
 
     public NhkProgramList getProgramList () throws IOException {
         final OkHttpClient okHttpClient = new OkHttpClient();

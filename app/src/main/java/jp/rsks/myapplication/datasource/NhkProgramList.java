@@ -7,9 +7,9 @@ import java.util.List;
  */
 public class NhkProgramList {
 
-    ProgramList list;
+    public ProgramList list;
     public class ProgramList {
-        List<NhkProgram> g1;
+        public List<NhkProgram> g1;
     }
     public class NhkProgram {
         String id;
@@ -17,9 +17,9 @@ public class NhkProgramList {
         String start_time;
         String end_time;
         Area area;
-        Service service;
-        String title;
-        String subtitle;
+        public Service service;
+        public String title;
+        public String subtitle;
 
         public class Area {
             String id;
@@ -28,9 +28,9 @@ public class NhkProgramList {
         public class Service {
             String id;
             String name;
-            Logo_l logo_l;
+            public Logo_l logo_l;
             public class Logo_l {
-                String url;
+                public String url;
             }
         }
     }

@@ -14,6 +14,7 @@
 
 package jp.rsks.myapplication;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.TimerTask;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v17.leanback.app.BackgroundManager;
@@ -38,11 +40,13 @@ import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.AsyncLayoutInflater;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +54,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import jp.rsks.myapplication.datasource.NhkProgramDataLoader;
+import jp.rsks.myapplication.datasource.NhkProgramList;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
@@ -92,25 +99,15 @@ public class MainFragment extends BrowseFragment {
     }
 
     private void loadRows() {
-        List<Movie> list = MovieList.setupMovies();
-
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        CardPresenter cardPresenter = new CardPresenter();
+        ProgramCardPresenter cardPresenter = new ProgramCardPresenter();
 
-        int i;
-        for (i = 0; i < NUM_ROWS; i++) {
-            if (i != 0) {
-                Collections.shuffle(list);
-            }
-            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-            for (int j = 0; j < NUM_COLS; j++) {
-                listRowAdapter.add(list.get(j % 5));
-            }
-            HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY[i]);
-            mRowsAdapter.add(new ListRow(header, listRowAdapter));
-        }
+        HeaderItem header = new HeaderItem(0, "NHK総合");
+        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+        mRowsAdapter.add(new ListRow(header, listRowAdapter));
+        new NhkDataLoader(listRowAdapter).execute();
 
-        HeaderItem gridHeader = new HeaderItem(i, "PREFERENCES");
+        HeaderItem gridHeader = new HeaderItem(1, "PREFERENCES");
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
@@ -120,6 +117,40 @@ public class MainFragment extends BrowseFragment {
         mRowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         setAdapter(mRowsAdapter);
+
+    }
+
+    private class NhkDataLoader extends AsyncTask<Void, Void, Void> {
+
+        private ArrayObjectAdapter adapter;
+        public NhkDataLoader(ArrayObjectAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            ArrayObjectAdapter adapter = this.adapter;
+
+            NhkProgramDataLoader loader = new NhkProgramDataLoader();
+            NhkProgramList progList;
+            try {
+                progList = loader.getProgramList();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            if(progList.list == null) {
+                return null;
+            }
+
+            for(NhkProgramList.NhkProgram program : progList.list.g1){
+                Log.i(TAG, "######" + program.title);
+                adapter.add(program);
+            }
+
+            return null;
+        }
 
     }
 
