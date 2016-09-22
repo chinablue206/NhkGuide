@@ -1,5 +1,6 @@
 package jp.rsks.myapplication.datasource;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class NhkProgramList {
         public List<NhkProgram> s3;
 
     }
-    public class NhkProgram {
+    public class NhkProgram implements Serializable {
         String id;
         String event_id;
         String start_time;
@@ -25,16 +26,17 @@ public class NhkProgramList {
         public Service service;
         public String title;
         public String subtitle;
+        public String content;
 
-        public class Area {
+        public class Area implements Serializable{
             String id;
             String name;
         }
-        public class Service {
+        public class Service implements  Serializable{
             String id;
             String name;
             public Logo_l logo_l;
-            public class Logo_l {
+            public class Logo_l implements Serializable{
                 public String url;
             }
         }

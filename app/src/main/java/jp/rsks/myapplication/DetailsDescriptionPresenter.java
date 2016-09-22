@@ -16,16 +16,18 @@ package jp.rsks.myapplication;
 
 import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
+import jp.rsks.myapplication.datasource.NhkProgramList;
+
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        Movie movie = (Movie) item;
+        NhkProgramList.NhkProgram prog = (NhkProgramList.NhkProgram) item;
 
-        if (movie != null) {
-            viewHolder.getTitle().setText(movie.getTitle());
-            viewHolder.getSubtitle().setText(movie.getStudio());
-            viewHolder.getBody().setText(movie.getDescription());
+        if (prog != null) {
+            viewHolder.getTitle().setText(prog.title);
+            viewHolder.getSubtitle().setText(prog.subtitle);
+            viewHolder.getBody().setText(prog.content);
         }
     }
 }
