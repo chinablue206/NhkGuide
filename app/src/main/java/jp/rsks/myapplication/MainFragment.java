@@ -55,6 +55,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import jp.rsks.myapplication.datasource.NhkChannelList;
 import jp.rsks.myapplication.datasource.NhkProgramDataLoader;
 import jp.rsks.myapplication.datasource.NhkProgramList;
 
@@ -102,11 +103,15 @@ public class MainFragment extends BrowseFragment {
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         ProgramCardPresenter cardPresenter = new ProgramCardPresenter();
 
-        HeaderItem header = new HeaderItem(0, "NHK総合");
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-        mRowsAdapter.add(new ListRow(header, listRowAdapter));
-        new NhkDataLoader(listRowAdapter).execute();
+        int index = 0;
+        for(NhkChannelList ch : NhkChannelList.values()) {
 
+            HeaderItem header = new HeaderItem(index, ch.getLabel());
+            ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+            mRowsAdapter.add(new ListRow(header, listRowAdapter));
+            new NhkDataLoader(listRowAdapter).execute(ch.getId());
+            index += 1;
+        }
         HeaderItem gridHeader = new HeaderItem(1, "PREFERENCES");
 
         GridItemPresenter mGridPresenter = new GridItemPresenter();
@@ -120,7 +125,8 @@ public class MainFragment extends BrowseFragment {
 
     }
 
-    private class NhkDataLoader extends AsyncTask<Void, Void, Void> {
+    private class NhkDataLoader
+            extends AsyncTask<String, Void, List<NhkProgramList.NhkProgram>> {
 
         private ArrayObjectAdapter adapter;
         public NhkDataLoader(ArrayObjectAdapter adapter) {
@@ -128,13 +134,13 @@ public class MainFragment extends BrowseFragment {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
-            ArrayObjectAdapter adapter = this.adapter;
+        protected List<NhkProgramList.NhkProgram> doInBackground(String... params) {
+            final String chId = params[0];
 
-            NhkProgramDataLoader loader = new NhkProgramDataLoader();
-            NhkProgramList progList;
+            final NhkProgramDataLoader loader = new NhkProgramDataLoader();
+            final NhkProgramList progList;
             try {
-                progList = loader.getProgramList();
+                progList = loader.getProgramList(chId);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -144,14 +150,16 @@ public class MainFragment extends BrowseFragment {
                 return null;
             }
 
-            for(NhkProgramList.NhkProgram program : progList.list.g1){
-                Log.i(TAG, "######" + program.title);
-                adapter.add(program);
-            }
-
-            return null;
+            return progList.list.pl;
         }
 
+        @Override
+        protected void onPostExecute(List<NhkProgramList.NhkProgram> nhkPrograms) {
+            if(nhkPrograms == null) { return; }
+            for(NhkProgramList.NhkProgram program : nhkPrograms) {
+                this.adapter.add(program);
+            }
+        }
     }
 
     private void prepareBackgroundManager() {

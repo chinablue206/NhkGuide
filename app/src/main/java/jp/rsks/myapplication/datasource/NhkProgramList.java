@@ -9,7 +9,12 @@ public class NhkProgramList {
 
     public ProgramList list;
     public class ProgramList {
+        public List<NhkProgram> pl;
         public List<NhkProgram> g1;
+        public List<NhkProgram> e1;
+        public List<NhkProgram> s1;
+        public List<NhkProgram> s3;
+
     }
     public class NhkProgram {
         String id;
