@@ -35,8 +35,6 @@ public class ProgramDetailsFragment extends DetailsFragment {
     private FullWidthDetailsOverviewRowPresenter fwdoPresenter;
     private ClassPresenterSelector classPresenterSelector;
 
-    private DetailsRowBuilderTask detailsRowBuilderTask;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -49,8 +47,7 @@ public class ProgramDetailsFragment extends DetailsFragment {
 
         if(selectedProgram != null){
             fwdoPresenter = new FullWidthDetailsOverviewRowPresenter(new DetailsDescriptionPresenter());
-            detailsRowBuilderTask =
-                    (DetailsRowBuilderTask) new DetailsRowBuilderTask().execute(selectedProgram);
+            setupDetailOverviewRow(selectedProgram);
         } else {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
@@ -60,59 +57,44 @@ public class ProgramDetailsFragment extends DetailsFragment {
 
     @Override
     public void onStop() {
-        detailsRowBuilderTask.cancel(true);
         super.onStop();
     }
 
-    private class DetailsRowBuilderTask extends AsyncTask<NhkProgramList.NhkProgram, Integer, DetailsOverviewRow>{
+    private void setupDetailOverviewRow(NhkProgramList.NhkProgram selectedProgram){
+        final DetailsOverviewRow row = new DetailsOverviewRow(selectedProgram);
 
-        @Override
-        protected DetailsOverviewRow doInBackground(NhkProgramList.NhkProgram... params) {
-            //ToDo Glide の　into がメインスレッドでしか呼べない。
+        int width = Utils.convertDpToPixel(getActivity()
+                .getApplicationContext(), DETAIL_THUMB_WIDTH);
+        int height = Utils.convertDpToPixel(getActivity()
+                .getApplicationContext(), DETAIL_THUMB_HEIGHT);
 
-            final DetailsOverviewRow row = new DetailsOverviewRow(selectedProgram);
+        Glide.with(getActivity())
+                .load("http:" + selectedProgram.service.logo_l.url)
+                .asBitmap()
+                .error(R.drawable.default_background)
+                .into(new SimpleTarget<Bitmap>(width, height) {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        row.setImageBitmap(getActivity(), resource);
+                        startEntranceTransition();
+                    }
+                });
 
-
-            return row;
+        SparseArrayObjectAdapter sparseArrayObjectAdapter = new SparseArrayObjectAdapter();
+        for(int i = 0; i < 10; i++){
+            sparseArrayObjectAdapter.set(i, new Action(i, "label1", "label2"));
         }
 
-        @Override
-        protected void onPostExecute(DetailsOverviewRow detailsOverviewRow) {
-            final DetailsOverviewRow row = new DetailsOverviewRow(selectedProgram);
+        row.setActionsAdapter(sparseArrayObjectAdapter);
 
-            int width = Utils.convertDpToPixel(getActivity()
-                    .getApplicationContext(), DETAIL_THUMB_WIDTH);
-            int height = Utils.convertDpToPixel(getActivity()
-                    .getApplicationContext(), DETAIL_THUMB_HEIGHT);
+        classPresenterSelector = new ClassPresenterSelector();
+        fwdoPresenter.setInitialState(FullWidthDetailsOverviewRowPresenter.STATE_SMALL);
 
-            Glide.with(getActivity())
-                    .load("http:" + selectedProgram.service.logo_l.url)
-                    .asBitmap()
-                    .error(R.drawable.default_background)
-                    .into(new SimpleTarget<Bitmap>(width, height) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            row.setImageBitmap(getActivity(), resource);
-                            startEntranceTransition();
-                        }
-                    });
+        classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, fwdoPresenter);
 
-            SparseArrayObjectAdapter sparseArrayObjectAdapter = new SparseArrayObjectAdapter();
-            for(int i = 0; i < 10; i++){
-                sparseArrayObjectAdapter.set(i, new Action(i, "label1", "label2"));
-            }
-            detailsOverviewRow.setActionsAdapter(sparseArrayObjectAdapter);
-
-            classPresenterSelector = new ClassPresenterSelector();
-            fwdoPresenter.setInitialState(FullWidthDetailsOverviewRowPresenter.STATE_SMALL);
-
-            classPresenterSelector.addClassPresenter(DetailsOverviewRow.class, fwdoPresenter);
-
-            ArrayObjectAdapter adapter = new ArrayObjectAdapter(classPresenterSelector);
-            adapter.add(detailsOverviewRow);
-            setAdapter(adapter);
-
-        }
+        ArrayObjectAdapter adapter = new ArrayObjectAdapter(classPresenterSelector);
+        adapter.add(row);
+        setAdapter(adapter);
     }
 
 }
