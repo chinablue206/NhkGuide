@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+Properties props = new Properties()
+if (rootProject.file("apikey.properties").exists()) {
+    props.load(new FileInputStream(rootProject.file("apikey.properties")))
+} else {
+    println("No appid.properties in project root. Define dummy")
+    props.setProperty("apikey", "\"dummyappid\"")
+}
 
 android {
     compileSdkVersion 24
@@ -13,6 +20,9 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            buildConfigField("String", "APIKEY", props.apikey)
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

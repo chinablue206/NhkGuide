@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import jp.rsks.myapplication.BuildConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -14,7 +15,9 @@ import okhttp3.Response;
  * Created by rsk on 2016/09/18.
  */
 public class NhkProgramDataLoader {
-    private static final String apiKey = "?key=fCz1UEF3hiRhUqvMoAwqj7e9YnC5cudE";
+
+    private static final String apiKey = BuildConfig.APIKEY;
+    private static final String apiKeyParam = "?key=" + apiKey;
     private static final String baseUrl = "http://api.nhk.or.jp/v2/pg/list/130/%s/%s.json";
 
     public NhkProgramList getProgramList () throws IOException {
@@ -33,7 +36,7 @@ public class NhkProgramDataLoader {
 
     public NhkProgramList getProgramList (String chId, String date) throws IOException {
         final OkHttpClient okHttpClient = new OkHttpClient();
-        final String url = String.format(baseUrl, chId, date) + apiKey;
+        final String url = String.format(baseUrl, chId, date) + apiKeyParam;
         final Request request = new Request.Builder().url(url).build();
         final Response response = okHttpClient.newCall(request).execute();
 
