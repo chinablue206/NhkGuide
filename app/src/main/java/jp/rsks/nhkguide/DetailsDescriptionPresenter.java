@@ -12,22 +12,22 @@
  * the License.
  */
 
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
 
-/*
- * MainActivity class that loads MainFragment
- */
-public class MainActivity extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
+import jp.rsks.nhkguide.datasource.NhkProgramList;
+
+public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onBindDescription(ViewHolder viewHolder, Object item) {
+        NhkProgramList.NhkProgram prog = (NhkProgramList.NhkProgram) item;
+
+        if (prog != null) {
+            viewHolder.getTitle().setText(prog.title);
+            viewHolder.getSubtitle().setText(prog.subtitle);
+            viewHolder.getBody().setText(prog.content);
+        }
     }
 }

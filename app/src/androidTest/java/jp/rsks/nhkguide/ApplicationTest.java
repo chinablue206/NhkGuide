@@ -1,4 +1,4 @@
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

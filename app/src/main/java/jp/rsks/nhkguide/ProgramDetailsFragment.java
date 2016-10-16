@@ -1,9 +1,8 @@
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v17.leanback.app.DetailsFragment;
 import android.support.v17.leanback.widget.Action;
@@ -19,7 +18,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 
-import jp.rsks.myapplication.datasource.NhkProgramList;
+import jp.rsks.nhkguide.datasource.NhkProgramList;
 
 /**
  * Created by rsk on 2016/09/22.

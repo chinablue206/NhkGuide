@@ -12,22 +12,25 @@
  * the License.
  */
 
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.app.Activity;
+import android.os.Bundle;
 
-import jp.rsks.myapplication.datasource.NhkProgramList;
+/*
+ * Details activity class that loads LeanbackDetailsFragment class
+ */
+public class DetailsActivity extends Activity {
+    public static final String SHARED_ELEMENT_NAME = "hero";
+    public static final String PROGRAM = "Program";
 
-public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
-
+    /**
+     * Called when the activity is first created.
+     */
     @Override
-    protected void onBindDescription(ViewHolder viewHolder, Object item) {
-        NhkProgramList.NhkProgram prog = (NhkProgramList.NhkProgram) item;
-
-        if (prog != null) {
-            viewHolder.getTitle().setText(prog.title);
-            viewHolder.getSubtitle().setText(prog.subtitle);
-            viewHolder.getBody().setText(prog.content);
-        }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_details);
     }
+
 }

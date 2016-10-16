@@ -12,11 +12,10 @@
  * the License.
  */
 
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,18 +34,15 @@ import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.OnItemViewSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.view.AsyncLayoutInflater;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,9 +51,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import jp.rsks.myapplication.datasource.NhkChannelList;
-import jp.rsks.myapplication.datasource.NhkProgramDataLoader;
-import jp.rsks.myapplication.datasource.NhkProgramList;
+import jp.rsks.nhkguide.datasource.NhkChannelList;
+import jp.rsks.nhkguide.datasource.NhkProgramDataLoader;
+import jp.rsks.nhkguide.datasource.NhkProgramList;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";

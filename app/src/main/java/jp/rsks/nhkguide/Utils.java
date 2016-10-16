@@ -12,7 +12,7 @@
  * the License.
  */
 
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
 import android.content.Context;
 import android.graphics.Point;

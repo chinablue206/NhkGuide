@@ -1,10 +1,7 @@
-package jp.rsks.myapplication.datasource;
-import junit.framework.TestCase;
+package jp.rsks.nhkguide.datasource;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package jp.rsks.myapplication.datasource;
+package jp.rsks.nhkguide.datasource;
 
 import java.io.Serializable;
 import java.util.List;

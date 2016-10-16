@@ -1,4 +1,4 @@
-package jp.rsks.myapplication.datasource;
+package jp.rsks.nhkguide.datasource;
 
 import com.google.gson.Gson;
 
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import jp.rsks.myapplication.BuildConfig;
+import jp.rsks.nhkguide.BuildConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

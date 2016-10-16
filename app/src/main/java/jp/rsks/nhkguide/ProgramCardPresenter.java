@@ -1,14 +1,13 @@
-package jp.rsks.myapplication;
+package jp.rsks.nhkguide;
 
 import android.graphics.drawable.Drawable;
 import android.support.v17.leanback.widget.ImageCardView;
 import android.support.v17.leanback.widget.Presenter;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 
-import jp.rsks.myapplication.datasource.NhkProgramList;
+import jp.rsks.nhkguide.datasource.NhkProgramList;
 
 /**
  * Created by rsk on 2016/09/19.

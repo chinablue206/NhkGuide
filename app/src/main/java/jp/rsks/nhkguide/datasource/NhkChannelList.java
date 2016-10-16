@@ -1,4 +1,4 @@
-package jp.rsks.myapplication.datasource;
+package jp.rsks.nhkguide.datasource;
 
 /**
  * Created by rsk on 2016/09/19.
